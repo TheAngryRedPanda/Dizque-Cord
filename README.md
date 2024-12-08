@@ -12,6 +12,8 @@ Just a simple discord bot built to parse an xmltv file with basic commands.
 - add discord bot token to DISCORDKEY in .env
 - (optional) add tvdb api key to TVDBKEY in .env
 - add xmltv url to XMLTVURL in config.json
+- pip install -r requirements.txt
+- python bot.py
 
 [To-Do]
 - add timed content announcements + commands to enable/disable
