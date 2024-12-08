@@ -18,3 +18,4 @@ Just a simple discord bot built to parse an xmltv file with basic commands.
 [To-Do]
 - add timed content announcements + commands to enable/disable
 - add dizque server polling and announcement if failure is detected
+- more custom configuration options
