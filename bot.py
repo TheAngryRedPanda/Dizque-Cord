@@ -1,15 +1,15 @@
 from discord import Bot
 from discord import ApplicationContext
+import discord
 import commands as cmd
 import dotenv
 import os
 
 
 dotenv.load_dotenv()
-discordToken = os.getenv('DISCORDTOKEN')
+discordkey = os.getenv('DISCORDKEY')
 xmltvurl = os.getenv('XMLTVURL')
 bot = Bot()
-mainchannel = os.getenv('MAINCHANNEL')
 
 
 @bot.event
@@ -19,17 +19,21 @@ async def on_ready():
 
 @bot.slash_command(name="nowplaying", description="Now Playing on Cartoon Network ReVamped")
 async def nowplaying(ctx: ApplicationContext):
-    await ctx.respond(cmd.nowplaying())
+    await ctx.respond('Currently playing is:', embed=cmd.nowplaying())
+
 
 
 @bot.slash_command(name="upnext", description="Up Next on Cartoon Network ReVamped")
 async def upnext(ctx: ApplicationContext):
-    await ctx.respond(cmd.upnext())
+    await ctx.respond('Up next is :', embed=cmd.upnext())
 
 
 @bot.slash_command(name="help", description="Commands")
 async def help(ctx: ApplicationContext):
-    await ctx.respond(cmd.help())
+    await ctx.respond(embed=cmd.help())
 
+try:
+    bot.run(discordkey)
+except discord.errors.LoginFailure as e:
+    print('Unable to authenticate discord key.')
 
-bot.run(discordToken)  # run the bot with the token
