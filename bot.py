@@ -15,6 +15,7 @@ bot = Bot()
 @bot.event
 async def on_ready():
     print(f"{bot.user} is ready and online!")
+    cmd.announce_shedule()
 
 
 @bot.slash_command(name="nowplaying", description="Now Playing on Cartoon Network ReVamped")

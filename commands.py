@@ -39,3 +39,9 @@ def upnext():
     embed.add_field(name=next_programme['episode'], value=next_programme['description'])
     embed.set_image(url=tvdb.get_art_url(next_programme['title']))
     return embed
+
+
+def announce_shedule():
+    #channel = bot.get_channel()
+    #await channel.send()
+    return
