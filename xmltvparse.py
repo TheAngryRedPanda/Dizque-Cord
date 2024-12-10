@@ -12,6 +12,8 @@ def getcurrent(xmltvurl, mainchannel):
             if int(programme.get('start')[:15]) <= int(currenttimestamp) and int(programme.get('stop')[:15]) > int(
                     currenttimestamp) and programme.get('channel') == mainchannel:
                 content = {'title':programme[0].text}
+                content['start'] = programme.get('start')
+                content['stop'] = programme.get('stop')
                 for child in programme:
                     if child.tag == 'episode-num' and child.get('system') == 'onscreen':
                         content['episode'] = child.text
@@ -36,6 +38,8 @@ def getnext(xmltvurl, mainchannel):
         if programme.tag == 'programme':
             if int(programme.get('start')[:15]) == nextstarttime and programme.get('channel') == mainchannel:
                 content = {'title':programme[0].text}
+                content['start'] = programme.get('start')[:15]
+                content['stop'] = programme.get('stop')[:15]
                 for child in programme:
                     if child.tag == 'episode-num' and child.get('system') == 'onscreen':
                         content['episode'] = child.text

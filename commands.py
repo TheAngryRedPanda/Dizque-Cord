@@ -40,8 +40,3 @@ def upnext():
     embed.set_image(url=tvdb.get_art_url(next_programme['title']))
     return embed
 
-
-def announce_shedule():
-    #channel = bot.get_channel()
-    #await channel.send()
-    return
