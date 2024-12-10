@@ -1,7 +1,7 @@
 {
-  "XMLTVURL": "http://192.168.1.11:8000/api/xmltv.xml",
+  "XMLTVURL": "http://localhost:8000/api/xmltv.xml",
   "MAINCHANNEL": "1",
-  "ANNOUNCEMENTS_ENABLED": "TRUE",
-  "ANNOUNCEMENTS_CHANNEL_ID": "1313559549554458706",
-  "CHANNEL_NAME": "Cartoon Network ReVamped"
+  "ANNOUNCEMENTS_ENABLED": "DISABLED",
+  "ANNOUNCEMENTS_CHANNEL_ID": "",
+  "CHANNEL_NAME": "Dizque-Cord"
 }

@@ -7,6 +7,7 @@ import commands as cmd
 import dotenv
 import os
 from bot_announcements import announce_current
+import asyncio
 
 
 dotenv.load_dotenv()
@@ -16,15 +17,20 @@ bot = Bot()
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
     channel_name = config['CHANNEL_NAME']
+    announcements_enabled = config['ANNOUNCEMENTS_ENABLED']
 
 
 @bot.event
 async def on_ready():
     print(f"{bot.user} is ready and online!")
+    await announce()
 
 
 async def announce():
-    time.sleep(announce_current(bot))
+    while announcements_enabled == 'ENABLED':
+        wait = await announce_current(bot)
+        await asyncio.sleep(wait)
+
 
 
 @bot.slash_command(name="nowplaying", description="Now Playing on " + channel_name)
