@@ -1,7 +1,1 @@
-{
-  "XMLTVURL": "http://localhost:8000/api/xmltv.xml",
-  "MAINCHANNEL": "1",
-  "ANNOUNCEMENTS_ENABLED": "DISABLED",
-  "ANNOUNCEMENTS_CHANNEL_ID": "",
-  "CHANNEL_NAME": "Dizque-Cord"
-}
+{"XMLTVURL": "http://localhost:8000/api/xmltv.xml", "MAINCHANNEL": "1", "ANNOUNCEMENTS_ENABLED": "DISABLED", "ANNOUNCEMENTS_CHANNEL_ID": "", "CHANNEL_NAME": "Dizque-Cord", "ADMIN_ROLE_NAME": "admin"}

@@ -9,6 +9,7 @@ with open('config.json', 'r') as config_file:
     config = json.load(config_file)
     mainchannel = config['MAINCHANNEL']
     xmltvurl = config['XMLTVURL']
+    admin_role_name = config['ADMIN_ROLE_NAME']
 
 
 def help():
@@ -17,6 +18,8 @@ def help():
     )
     embed.add_field(name='**/nowplaying**', value='Displays the current streaming content', inline=False)
     embed.add_field(name='**/upnext**', value='Displays the next scheduled program', inline=False)
+    embed.add_field(name='**/announcements enable**', value='Ensables channel content announcements. Requires user role: ' + admin_role_name, inline=False)
+    embed.add_field(name='**/announcements disable**', value='Disables channel content announcements. Requires user role: ' + admin_role_name, inline=False)
     return embed
 
 
