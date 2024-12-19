@@ -1,5 +1,3 @@
-import time
-import json
 from discord import Bot
 from discord import ApplicationContext
 import discord
@@ -8,23 +6,29 @@ import dotenv
 import os
 from bot_announcements import announce_current
 import asyncio
+import config
 
 
-async def update_config(config):
-    with open('config.json', 'w') as config_file:
-        json.dump(config, config_file)
-
-global channel_name
-global announcements_enabled
+#initialization
+global discordkey
 dotenv.load_dotenv()
 discordkey = os.getenv('DISCORDKEY')
-xmltvurl = os.getenv('XMLTVURL')
 bot = Bot()
-with open('config.json', 'r') as config_file:
-    config = json.load(config_file)
-    channel_name = config['CHANNEL_NAME']
-    announcements_enabled = config['ANNOUNCEMENTS_ENABLED']
-    admin_role_name = config['ADMIN_ROLE_NAME']
+announcement_cmd = bot.create_group('announcements', 'Enable/Disable content announcements')
+
+
+async def announce():
+    while config.get_config_value('ANNOUNCEMENTS_ENABLED') == 'ENABLED':
+        wait = await announce_current(bot)
+        await asyncio.sleep(wait)
+
+
+async def admin_check(ctx):
+    for role in ctx.author.roles:
+        if role.name == config.get_config_value('ADMIN_ROLE_NAME'):
+            return True
+    else:
+        return False
 
 
 @bot.event
@@ -33,55 +37,41 @@ async def on_ready():
     await announce()
 
 
-async def announce():
-    while announcements_enabled == 'ENABLED':
-        wait = await announce_current(bot)
-        await asyncio.sleep(wait)
-
-
-async def admin_check(ctx):
-    for role in ctx.author.roles:
-        if role.name == admin_role_name:
-            return True
-    else:
-        return False
-
-
-announcement_cmd = bot.create_group('announcements', 'Enable/Disable content announcements')
-
-
-@announcement_cmd.command(description='Enables channel content announcements. Requires user role: ' + admin_role_name)
+@announcement_cmd.command(description='Enables channel content announcements. Requires user role: ' + config.get_config_value('ADMIN_ROLE_NAME'))
 async def enable(ctx):
     if await admin_check(ctx) == True:
-        global announcements_enabled
-        announcements_enabled = 'ENABLED'
-        config['ANNOUNCEMENTS_ENABLED'] = announcements_enabled
-        await update_config(config)
-        print('Announcements: ' + announcements_enabled)
+        #global announcements_enabled
+        #config.get_config_value("") = 'ENABLED'
+        conf = config.get_config_json()
+        conf['ANNOUNCEMENTS_ENABLED'] = 'ENABLED'
+        await config.update_config(conf)
+        print('Announcements: ' + conf['ANNOUNCEMENTS_ENABLED'])
         await ctx.respond('Announcements enabled.')
         await announce()
     else:
         await ctx.respond('This command is for admin users only.')
 
-@announcement_cmd.command(description='Disables channel content announcements. Requires user role: ' + admin_role_name)
+
+@announcement_cmd.command(description='Disables channel content announcements. Requires user role: ' + config.get_config_value('ADMIN_ROLE_NAME'))
 async def disable(ctx):
     if await admin_check(ctx) == True:
         global announcements_enabled
         announcements_enabled = 'DISABLED'
-        config['ANNOUNCEMENTS_ENABLED'] = announcements_enabled
-        await update_config(config)
+        conf = config.get_config_json()
+        conf['ANNOUNCEMENTS_ENABLED'] = announcements_enabled
+        await config.update_config(conf)
         print('Announcements: ' + announcements_enabled)
         await ctx.respond('Announcements disabled.')
     else:
         await ctx.respond('This command is for admin users only.')
 
-@bot.slash_command(name="nowplaying", description="Now Playing on " + channel_name)
+
+@bot.slash_command(name="nowplaying", description="Now Playing on " + config.get_config_value('CHANNEL_NAME'))
 async def nowplaying(ctx: ApplicationContext):
     await ctx.respond('Currently playing is:', embed=cmd.nowplaying())
 
 
-
-@bot.slash_command(name="upnext", description="Up Next on " + channel_name)
+@bot.slash_command(name="upnext", description="Up Next on " + config.get_config_value('CHANNEL_NAME'))
 async def upnext(ctx: ApplicationContext):
     await ctx.respond('Up next is :', embed=cmd.upnext())
 
@@ -90,9 +80,8 @@ async def upnext(ctx: ApplicationContext):
 async def help(ctx: ApplicationContext):
     await ctx.respond(embed=cmd.help())
 
+
 try:
     bot.run(discordkey)
 except discord.errors.LoginFailure as e:
     print('Unable to authenticate discord key.')
-
-

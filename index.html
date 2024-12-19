@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<title>Dizque-Cord Configuration</title>
+</head>	
+<body onload="load_config()">
+    <div><h1>Discord API Key</h1><input type=text id="DISCORDKEY"></div>
+    <div><h1>TVDB API Key</h1><input type=text id="TVDBKEY"></div>
+    <div><h1>XMLTV URL</h1><input type=url id="XMLTVURL"></div>
+    <div><h1>Main Channel #</h1><input type=text id="MAIN_CHANNEL_NUM"></div>
+    <div><h1>Channel Name</h1><input type=text id="CHANNEL_NAME"></div>
+    <div><h1>Announcements Channel Id</h1><input type=text id="ANNOUNCEMENTS_CHANNEL_ID"></div>
+    <div><h1>Admin Role Name</h1><input type=text id="ADMIN_ROLE_NAME"></div>
+    <div><h1>Actions</h1><button id="restart" onclick="restart()">Restart Bot</button><button id="save" onclick="save_config()">Save Changes</button><button id="restart" onclick="load_config()">Reload Config</button></div>
+    <div><form><h1>Announcements</h1><input type="radio" id="ann_enabled" name="announcements"><label for="ann_enabled">Enabled</label><input type="radio" id="ann_disabled" name="announcements"><label for="ann_disabled">Disabled</label></form></div>
+    <script>
+        function restart() {
+        fetch("http://localhost:5000/restart", {method: "POST"})
+        .then((response) => response.json())
+        .then((json) => {
+            alert(json.message)
+        })
+        }
+        function load_config() {
+            fetch("http://localhost:5000/config", {method: "GET"})
+            .then((response) => response.json())
+            .then((json) => {
+                document.getElementById("XMLTVURL").value = json.XMLTVURL;
+                document.getElementById("MAIN_CHANNEL_NUM").value = json.MAIN_CHANNEL;
+                document.getElementById("CHANNEL_NAME").value = json.CHANNEL_NAME;
+                document.getElementById("ANNOUNCEMENTS_CHANNEL_ID").value = json.ANNOUNCEMENTS_CHANNEL_ID;
+                document.getElementById("ADMIN_ROLE_NAME").value = json.ADMIN_ROLE_NAME;
+            })
+        }
+        function save_config(){
+            fetch("http://localhost:5000/config", {method:"POST",  
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                XMLTVURL: document.getElementById("XMLTVURL").value,
+                MAINCHANNEL: document.getElementById("MAIN_CHANNEL_NUM").value,
+                ANNOUNCEMENTS_ENABLED: 'DISABLED' ,
+                ANNOUNCEMENTS_CHANNEL_ID: document.getElementById("ANNOUNCEMENTS_CHANNEL_ID").value,
+                CHANNEL_NAME: document.getElementById("CHANNEL_NAME").value,
+                ADMIN_ROLE_NAME: document.getElementById("ADMIN_ROLE_NAME").value
+            })})
+            .then((response) => response.json())
+            .then ((json) => {
+                alert(json.message)
+            })
+            load_config()
+        }
+</script>
+</body>
+</html>
