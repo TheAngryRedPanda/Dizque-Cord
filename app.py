@@ -31,8 +31,12 @@ def config():
         response.headers['Access-Control-Allow-Origin'] = '*'
         return response
     elif request.method == 'POST':
+        if request.json["ANNOUNCEMENTS_ENABLED"] == True:
+            request.json["ANNOUNCEMENTS_ENABLED"] = "ENABLED"
+        elif request.json["ANNOUNCEMENTS_ENABLED"] == False:
+            request.json["ANNOUNCEMENTS_ENABLED"] = "DISABLED"
         cf.update_config(request.json)
-        print(request)
+        print(request.json)
         data = {'message':'Changes saved. Changes will take effect when the bot is restarted.'}
         response = jsonify(data)
         response.headers['Access-Control-Allow-Origin'] = '*'

@@ -12,7 +12,7 @@
     <div><h1>Announcements Channel Id</h1><input type=text id="ANNOUNCEMENTS_CHANNEL_ID"></div>
     <div><h1>Admin Role Name</h1><input type=text id="ADMIN_ROLE_NAME"></div>
     <div><h1>Actions</h1><button id="restart" onclick="restart()">Restart Bot</button><button id="save" onclick="save_config()">Save Changes</button><button id="restart" onclick="load_config()">Reload Config</button></div>
-    <div><form><h1>Announcements</h1><input type="radio" id="ann_enabled" name="announcements"><label for="ann_enabled">Enabled</label><input type="radio" id="ann_disabled" name="announcements"><label for="ann_disabled">Disabled</label></form></div>
+    <div><form><h1>Announcements</h1><input type="hidden" id="announce_enabledefault" name="announcements" value="DISABLED"><input type="checkbox" id="announce_enable" name="announcements"><label for="announce_enable">Enabled?</label></form></div>
     <script>
         function restart() {
         fetch("http://localhost:5000/restart", {method: "POST"})
@@ -26,7 +26,7 @@
             .then((response) => response.json())
             .then((json) => {
                 document.getElementById("XMLTVURL").value = json.XMLTVURL;
-                document.getElementById("MAIN_CHANNEL_NUM").value = json.MAIN_CHANNEL;
+                document.getElementById("MAIN_CHANNEL_NUM").value = json.MAINCHANNEL;
                 document.getElementById("CHANNEL_NAME").value = json.CHANNEL_NAME;
                 document.getElementById("ANNOUNCEMENTS_CHANNEL_ID").value = json.ANNOUNCEMENTS_CHANNEL_ID;
                 document.getElementById("ADMIN_ROLE_NAME").value = json.ADMIN_ROLE_NAME;
@@ -40,7 +40,7 @@
             body: JSON.stringify({
                 XMLTVURL: document.getElementById("XMLTVURL").value,
                 MAINCHANNEL: document.getElementById("MAIN_CHANNEL_NUM").value,
-                ANNOUNCEMENTS_ENABLED: 'DISABLED' ,
+                ANNOUNCEMENTS_ENABLED: document.getElementById("announce_enable").checked,
                 ANNOUNCEMENTS_CHANNEL_ID: document.getElementById("ANNOUNCEMENTS_CHANNEL_ID").value,
                 CHANNEL_NAME: document.getElementById("CHANNEL_NAME").value,
                 ADMIN_ROLE_NAME: document.getElementById("ADMIN_ROLE_NAME").value
@@ -49,7 +49,6 @@
             .then ((json) => {
                 alert(json.message)
             })
-            load_config()
         }
 </script>
 </body>
