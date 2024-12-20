@@ -18,10 +18,12 @@ announcement_cmd = bot.create_group('announcements', 'Enable/Disable content ann
 
 
 async def announce():
-    while config.get_config_value('ANNOUNCEMENTS_ENABLED') == 'ENABLED':
-        wait = await announce_current(bot)
-        await asyncio.sleep(wait)
-
+    while True:
+        if config.get_config_value('ANNOUNCEMENTS_ENABLED') == 'ENABLED':
+            wait = await announce_current(bot)
+            await asyncio.sleep(wait)
+        else:
+            await asyncio.sleep(60)
 
 async def admin_check(ctx):
     for role in ctx.author.roles:
@@ -44,10 +46,9 @@ async def enable(ctx):
         #config.get_config_value("") = 'ENABLED'
         conf = config.get_config_json()
         conf['ANNOUNCEMENTS_ENABLED'] = 'ENABLED'
-        await config.update_config(conf)
+        config.update_config(conf)
         print('Announcements: ' + conf['ANNOUNCEMENTS_ENABLED'])
         await ctx.respond('Announcements enabled.')
-        await announce()
     else:
         await ctx.respond('This command is for admin users only.')
 
@@ -59,7 +60,7 @@ async def disable(ctx):
         announcements_enabled = 'DISABLED'
         conf = config.get_config_json()
         conf['ANNOUNCEMENTS_ENABLED'] = announcements_enabled
-        await config.update_config(conf)
+        config.update_config(conf)
         print('Announcements: ' + announcements_enabled)
         await ctx.respond('Announcements disabled.')
     else:

@@ -22,11 +22,15 @@ def restart():
     data = {'message':'restarting'}
     return jsonify(data)
 
-
+#need to trigger bot.announce() if announcements were just enabled, if 'POST', if disabled in config & enabled in request json, then call bot.announce()
 @app.route('/config', methods=['GET','POST'])
 def config():
     if request.method == 'GET':
         data = cf.get_config_json()
+        if data["ANNOUNCEMENTS_ENABLED"] == "ENABLED":
+            data["ANNOUNCEMENTS_ENABLED"] = True
+        elif data["ANNOUNCEMENTS_ENABLED"] == "DISABLED":
+            data["ANNOUNCEMENTS_ENABLED"] = False
         response = jsonify(data)
         response.headers['Access-Control-Allow-Origin'] = '*'
         return response

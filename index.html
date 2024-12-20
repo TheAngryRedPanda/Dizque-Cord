@@ -4,15 +4,13 @@
 <title>Dizque-Cord Configuration</title>
 </head>	
 <body onload="load_config()">
-    <div><h1>Discord API Key</h1><input type=text id="DISCORDKEY"></div>
-    <div><h1>TVDB API Key</h1><input type=text id="TVDBKEY"></div>
-    <div><h1>XMLTV URL</h1><input type=url id="XMLTVURL"></div>
-    <div><h1>Main Channel #</h1><input type=text id="MAIN_CHANNEL_NUM"></div>
-    <div><h1>Channel Name</h1><input type=text id="CHANNEL_NAME"></div>
-    <div><h1>Announcements Channel Id</h1><input type=text id="ANNOUNCEMENTS_CHANNEL_ID"></div>
-    <div><h1>Admin Role Name</h1><input type=text id="ADMIN_ROLE_NAME"></div>
-    <div><h1>Actions</h1><button id="restart" onclick="restart()">Restart Bot</button><button id="save" onclick="save_config()">Save Changes</button><button id="restart" onclick="load_config()">Reload Config</button></div>
-    <div><form><h1>Announcements</h1><input type="hidden" id="announce_enabledefault" name="announcements" value="DISABLED"><input type="checkbox" id="announce_enable" name="announcements"><label for="announce_enable">Enabled?</label></form></div>
+    <div><h1>XMLTV URL</h1><input class="field" type=url id="XMLTVURL"></div>
+    <div><h1>Main Channel #</h1><input class="field" type=text id="MAIN_CHANNEL_NUM"></div>
+    <div><h1>Channel Name</h1><input class="field" type=text id="CHANNEL_NAME"></div>
+    <div><h1>Announcements Channel Id</h1><input class="field" type=text id="ANNOUNCEMENTS_CHANNEL_ID"></div>
+    <div><h1>Admin Role Name</h1><input class="field" type=text id="ADMIN_ROLE_NAME"></div>
+    <div><form><h1>Announcements</h1><input class="field" type="checkbox" id="announce_enable" name="announcements"><label for="announce_enable">Enabled?</label></form></div>
+    <div><h1>Actions</h1><button class="field" disabled id="restart" onclick="restart()">Restart Bot</button><button id="save" onclick="save_config()">Save Changes</button><button id="restart" onclick="load_config()">Reload Config</button></div>
     <script>
         function restart() {
         fetch("http://localhost:5000/restart", {method: "POST"})
@@ -30,6 +28,7 @@
                 document.getElementById("CHANNEL_NAME").value = json.CHANNEL_NAME;
                 document.getElementById("ANNOUNCEMENTS_CHANNEL_ID").value = json.ANNOUNCEMENTS_CHANNEL_ID;
                 document.getElementById("ADMIN_ROLE_NAME").value = json.ADMIN_ROLE_NAME;
+                document.getElementById("announce_enable").checked = json.ANNOUNCEMENTS_ENABLED
             })
         }
         function save_config(){
@@ -51,5 +50,9 @@
             })
         }
 </script>
+<style>
+    h1 {display: inline; margin-right: 10px;}
+    .field{margin: auto}
+</style>
 </body>
 </html>
